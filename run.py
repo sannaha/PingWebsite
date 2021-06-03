@@ -18,23 +18,32 @@ count = 1
 
 # ping常用网址
 for website in tqdm(websiteList):
-    pingResult = str(list(ping(website)))
-    result = re.findall(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b", pingResult)
-    if len(result) > 0:
-        succeedList.append(website + ' ' + result[0] + '\n')
-    else:
+    try:
+        pingResult = str(list(ping(website)))
+    except:
         failedList.append(website)
+    else:
+        result = re.findall(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b", pingResult)
+        if len(result) > 0:
+            succeedList.append(website + ' ' + result[0] + '\n')
+        else:
+            failedList.append(website)
 
 # 对失败列表中的网站重新ping，最多尝试3次
 while len(failedList) > 0 and count <= 3:
     print("正在重试，第" + str(count) + "次")
     count += 1
     for website in tqdm(failedList):
-        pingResult = str(list(ping(website)))
-        result = re.findall(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b", pingResult)
-        if len(result) > 0:
-            succeedList.append(website + ' ' + result[0] + '\n')
-            failedList.remove(website)
+        try:
+            pingResult = str(list(ping(website)))
+        except:
+            pass
+        else:
+            result = re.findall(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b",
+                                pingResult)
+            if len(result) > 0:
+                succeedList.append(website + ' ' + result[0] + '\n')
+                failedList.remove(website)
 
 if len(failedList) == 0:
     print("全部成功")
