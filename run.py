@@ -25,7 +25,7 @@ for website in tqdm(websiteList):
     else:
         result = re.findall(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b", pingResult)
         if len(result) > 0:
-            succeedList.append(website + ' ' + result[0] + '\n')
+            succeedList.append(result[0] + ' ' + website + '\n')
         else:
             failedList.append(website)
 
@@ -42,7 +42,7 @@ while len(failedList) > 0 and count <= 3:
             result = re.findall(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b",
                                 pingResult)
             if len(result) > 0:
-                succeedList.append(website + ' ' + result[0] + '\n')
+                succeedList.append(result[0] + ' ' + website + '\n')
                 failedList.remove(website)
 
 if len(failedList) == 0:
