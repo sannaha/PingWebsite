@@ -5,9 +5,10 @@ import re, time, os
 # 常用网站列表
 websiteList = [
     'bilibili.com', 't.bilibili.com', 'live.bilibili.com',
+    'broadcastlv.chat.bilibili.com', 'api.live.bilibili.com',
     'upos-sz-mirrorcos.bilivideo.com', 'huya.com', 'txdirect.hls.huya.com',
     'douyu.com', 'tx2play1.douyucdn.cn', 'csdn.net', 'sannaha.moe',
-    'baidu.com', 'allall02.baidupcs.com'
+    'baidu.com', 'allall02.baidupcs.com', 'weibo.com'
 ]
 # 测试用网站列表
 # websiteList = ['bilibili.com', 'www.google.com']
@@ -16,6 +17,13 @@ failedList = []
 currentTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 count = 1
 
+
+# 从pingResult中捕获ip
+def checkIP(pingResult):
+    ips = re.findall(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b", pingResult)
+    return ips
+
+
 # ping常用网址
 for website in tqdm(websiteList):
     try:
@@ -23,9 +31,9 @@ for website in tqdm(websiteList):
     except:
         failedList.append(website)
     else:
-        result = re.findall(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b", pingResult)
-        if len(result) > 0:
-            succeedList.append(result[0] + ' ' + website + '\n')
+        ips = checkIP(pingResult)
+        if len(ips) > 0:
+            succeedList.append(ips[0] + ' ' + website + '\n')
         else:
             failedList.append(website)
 
@@ -39,10 +47,9 @@ while len(failedList) > 0 and count <= 3:
         except:
             pass
         else:
-            result = re.findall(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b",
-                                pingResult)
-            if len(result) > 0:
-                succeedList.append(result[0] + ' ' + website + '\n')
+            ips = checkIP(pingResult)
+            if len(ips) > 0:
+                succeedList.append(ips[0] + ' ' + website + '\n')
                 failedList.remove(website)
 
 if len(failedList) == 0:
