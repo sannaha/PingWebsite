@@ -2,7 +2,10 @@
 
 使用：
 
-```python
+```cmd
 py run.py
+
+# 或运行bat文件
+./pingwebsite.bat
 ```
 
