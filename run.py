@@ -2,20 +2,18 @@ from pythonping import ping
 from tqdm import tqdm
 import re, time, os
 
-# 常用网站列表
-websiteList = [
-    'bilibili.com', 't.bilibili.com', 'live.bilibili.com',
-    'broadcastlv.chat.bilibili.com', 'api.live.bilibili.com',
-    'upos-sz-mirrorcos.bilivideo.com', 'huya.com', 'txdirect.hls.huya.com',
-    'douyu.com', 'tx2play1.douyucdn.cn', 'csdn.net', 'sannaha.moe',
-    'baidu.com', 'allall02.baidupcs.com', 'weibo.com'
-]
-# 测试用网站列表
-# websiteList = ['bilibili.com', 'www.google.com']
+websiteList = []
 succeedList = []
 failedList = []
 currentTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 count = 1
+
+# 读取文件获取网站列表
+with open('website.txt', 'r') as f:
+    websiteList = f.read().splitlines()
+
+# 测试用网站列表
+# websiteList = ['bilibili.com', 'www.google.com']
 
 
 # 从pingResult中捕获ip
